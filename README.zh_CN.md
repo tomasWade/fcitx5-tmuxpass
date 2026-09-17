@@ -50,7 +50,7 @@ sudo make install    # libtmuxpass.so -> /usr/lib/fcitx5，conf -> /usr/share/fc
 fcitx5 -r            # 重启 fcitx5 生效
 ```
 
-Arch 用户可用 AUR 包 `fcitx5-tmuxpass-git`。
+各版本源码包在 [Releases](https://github.com/tomasWade/fcitx5-tmuxpass/releases) 页——下载解包后同样 `make && sudo make install`。插件与本机 fcitx5 的 ABI 绑定，对着实际运行的 fcitx5 编译才可靠。
 
 卸载：`sudo make uninstall && fcitx5 -r`。
 

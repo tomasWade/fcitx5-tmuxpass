@@ -66,7 +66,11 @@ sudo make install    # libtmuxpass.so -> /usr/lib/fcitx5, conf -> /usr/share/fci
 fcitx5 -r            # restart fcitx5
 ```
 
-Arch users: see the AUR package `fcitx5-tmuxpass-git`.
+Versioned source tarballs are available on the
+[Releases](https://github.com/tomasWade/fcitx5-tmuxpass/releases) page —
+download, untar, and run `make && sudo make install` as above. The addon
+links against your installed fcitx5's ABI, so building against the fcitx5
+you actually run is the reliable path.
 
 Uninstall: `sudo make uninstall && fcitx5 -r`.
 
