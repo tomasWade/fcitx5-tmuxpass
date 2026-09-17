@@ -66,11 +66,21 @@ sudo make install    # libtmuxpass.so -> /usr/lib/fcitx5, conf -> /usr/share/fci
 fcitx5 -r            # restart fcitx5
 ```
 
-Versioned source tarballs are available on the
-[Releases](https://github.com/tomasWade/fcitx5-tmuxpass/releases) page —
-download, untar, and run `make && sudo make install` as above. The addon
-links against your installed fcitx5's ABI, so building against the fcitx5
-you actually run is the reliable path.
+**Prebuilt binary** (fcitx5 5.1.x, x86_64): grab
+`fcitx5-tmuxpass-<version>-linux-x86_64.tar.gz` from the
+[Releases](https://github.com/tomasWade/fcitx5-tmuxpass/releases) page and:
+
+```bash
+tar -xzf fcitx5-tmuxpass-*-linux-x86_64.tar.gz
+sudo install -Dm755 libtmuxpass.so -t /usr/lib/fcitx5/
+sudo install -Dm644 tmuxpass.conf -t /usr/share/fcitx5/addon/
+fcitx5 -r
+```
+
+The prebuilt addon is stripped and matches the fcitx5 5.1.x ABI. If it fails
+to load against your fcitx5 version, or you are on another architecture,
+build from source (releases also carry the auto-generated source tarballs) —
+building against the fcitx5 you actually run is always the reliable path.
 
 Uninstall: `sudo make uninstall && fcitx5 -r`.
 

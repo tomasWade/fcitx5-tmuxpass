@@ -50,7 +50,16 @@ sudo make install    # libtmuxpass.so -> /usr/lib/fcitx5，conf -> /usr/share/fc
 fcitx5 -r            # 重启 fcitx5 生效
 ```
 
-各版本源码包在 [Releases](https://github.com/tomasWade/fcitx5-tmuxpass/releases) 页——下载解包后同样 `make && sudo make install`。插件与本机 fcitx5 的 ABI 绑定，对着实际运行的 fcitx5 编译才可靠。
+**预编译成品**（fcitx5 5.1.x，x86_64）：到 [Releases](https://github.com/tomasWade/fcitx5-tmuxpass/releases) 页下载 `fcitx5-tmuxpass-<版本>-linux-x86_64.tar.gz`：
+
+```bash
+tar -xzf fcitx5-tmuxpass-*-linux-x86_64.tar.gz
+sudo install -Dm755 libtmuxpass.so -t /usr/lib/fcitx5/
+sudo install -Dm644 tmuxpass.conf -t /usr/share/fcitx5/addon/
+fcitx5 -r
+```
+
+预编译包为 strip 后成品，匹配 fcitx5 5.1.x ABI。若你的 fcitx5 版本加载失败或架构不同，改用源码编译（release 页也有自动生成的源码 tarball）——对着实际运行的 fcitx5 编译永远最可靠。
 
 卸载：`sudo make uninstall && fcitx5 -r`。
 
