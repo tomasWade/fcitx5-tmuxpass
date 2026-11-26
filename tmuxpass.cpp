@@ -47,7 +47,9 @@ FCITX_CONFIGURATION(
                              "PrefixKeys",
                              _("Prefix keys"),
                              {Key("Control+q")},
-                             KeyListConstrain()};
+                             KeyListConstrain(
+                                 KeyConstrainFlags{
+                                     KeyConstrainFlag::AllowModifierLess})};
     Option<PrefixAction, NoConstrain<PrefixAction>,
            DefaultMarshaller<PrefixAction>, EnumAnnotation>
         action{this,
