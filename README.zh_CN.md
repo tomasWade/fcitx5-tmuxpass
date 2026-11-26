@@ -65,13 +65,16 @@ fcitx5 -r
 
 ## 配置
 
-`~/.config/fcitx5/conf/tmuxpass.conf`（手改后 `fcitx5 -r`，或用 fcitx5-configtool 的
-GUI 配置页即时生效）：
+`~/.config/fcitx5/conf/tmuxpass.conf`（改完重启 fcitx5 生效）。systemd 自启的桌面用
+单元名重启，如 `systemctl --user restart app-org.fcitx.Fcitx5@autostart.service`；
+裸 `fcitx5 -r` 会顶掉 systemd 管理的实例并导致其反复重启。注意 dbus 的
+`Controller1.ReloadConfig` 和 fcitx5-configtool 的保存都不会触发 addon 配置重载
+（fcitx5 5.1.23 实测），改完配置以重启为准：
 
 ```ini
 [PrefixKeys]
 0=Control+q
-# 可加多行，如 1=Control+b
+# 可加多行，如 1=Control+b；裸键（Escape、F1 等无修饰键）自 v0.2.1 起支持
 
 Action=SwitchIM
 
@@ -84,7 +87,7 @@ WindowMs=400
 
 | 配置项 | 默认 | 说明 |
 | --- | --- | --- |
-| `PrefixKeys` | `Control+q` | prefix 键列表，标准 fcitx 键名格式，可多个 |
+| `PrefixKeys` | `Control+q` | prefix 键列表，标准 fcitx 键名格式，可多个；v0.2.1 起接受裸键（Escape/F1 等无修饰键） |
 | `Action` | `SwitchIM` | prefix 后动作：`SwitchIM` 切英文 / `PassThrough` 时间窗透传 |
 | `Programs` | `foot` | 生效程序 appId 列表；空列表 = 全局生效 |
 | `WindowMs` | `400` | 透传时间窗（毫秒），范围 100–5000，仅 `PassThrough` 模式使用 |
@@ -108,6 +111,10 @@ PassThrough 模式：
 
 **怎么查终端的 appId？** `fcitx5-diagnose` 的 input context 列表 Program 列，或终端设
 置的 wayland appId（foot → `foot`，kitty → `kitty`，footclient 窗口仍是 `foot`）。
+
+**配置了 Escape/F1 等裸键不生效？** v0.2.0 的 `KeyListConstrain()` 默认拒绝无修饰键
+（`states == 0` 的键在配置解析时被静默丢弃），v0.2.1 起已开启 `AllowModifierLess`。
+另外 dbus ReloadConfig 与 configtool 保存均不会重载 addon 配置，改完配置需重启 fcitx5。
 
 **为什么切到第一个输入法？** fcitx5 的 deactivate 就是切到输入法组第一项。确保
 fcitx5-configtool 里输入法列表第一项是纯键盘布局（如 `keyboard-us`）——默认即如此。

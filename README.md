@@ -86,13 +86,19 @@ Uninstall: `sudo make uninstall && fcitx5 -r`.
 
 ## Configuration
 
-Edit `~/.config/fcitx5/conf/tmuxpass.conf` (then `fcitx5 -r`), or use
-fcitx5-configtool's GUI page for this addon (changes apply immediately).
+Edit `~/.config/fcitx5/conf/tmuxpass.conf`, then restart fcitx5. On desktops that
+autostart fcitx5 via systemd, restart the unit instead, e.g.
+`systemctl --user restart app-org.fcitx.Fcitx5@autostart.service` — a bare
+`fcitx5 -r` replaces the systemd-managed instance and makes it crash-loop.
+Note that neither dbus `Controller1.ReloadConfig` nor fcitx5-configtool's save
+triggers an addon config reload (verified on fcitx5 5.1.23), so always restart
+after editing.
 
 ```ini
 [PrefixKeys]
 0=Control+q
-# multiple prefix keys are supported, e.g. 1=Control+b
+# multiple prefix keys are supported, e.g. 1=Control+b; modifier-less keys
+# (Escape, F1, ...) accepted since v0.2.1
 
 Action=SwitchIM
 
@@ -105,7 +111,7 @@ WindowMs=400
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `PrefixKeys` | `Control+q` | Prefix keys, standard fcitx key names, multiple allowed |
+| `PrefixKeys` | `Control+q` | Prefix keys, standard fcitx key names, multiple allowed; modifier-less keys (Escape/F1/...) accepted since v0.2.1 |
 | `Action` | `SwitchIM` | `SwitchIM`: switch to first IM (English); `PassThrough`: time-window key pass-through |
 | `Programs` | `foot` | React only in these programs (wayland appId); empty list = all programs |
 | `WindowMs` | `400` | Pass-through window in ms (100–5000), `PassThrough` mode only |
@@ -135,6 +141,12 @@ PassThrough mode:
 Look at the `Program` column in the input context list of `fcitx5-diagnose`,
 or check the wayland appId your terminal sets (foot → `foot`, kitty →
 `kitty`, footclient windows still report `foot`).
+
+**Escape/F1 (modifier-less keys) in PrefixKeys have no effect?**
+v0.2.0's `KeyListConstrain()` rejected modifier-less keys (`states == 0`) at
+config parse time; v0.2.1 enables `AllowModifierLess`. Also note that neither
+dbus `ReloadConfig` nor configtool's save reloads addon configuration —
+restart fcitx5 after edits.
 
 **Why does SwitchIM switch to the first input method?**
 fcitx5's "deactivate" goes to the first entry of your input method group.
